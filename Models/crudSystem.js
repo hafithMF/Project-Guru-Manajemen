@@ -4,8 +4,8 @@ const runValidation = require('../Config/Validation');
 
 async function listCrud(authId) {
   try {
-    const [crud] = await connection.query('select * from todos where user_id = ?', [authId]);
-    return { status: true, message: 'success get todos', data: crud };
+    const [crud] = await connection.query('select * from auth where id = ?', [authId]);
+    return { status: true, message: 'success get crud', data: crud };
   } catch (error) {
     console.log(error);
   }
@@ -14,7 +14,7 @@ async function createCrud(name, alamat, pelajaran, authId) {
   // cek validasi
   const validation = [
     body("name").notEmpty().withMessage("name is required"),
-    body("alamat").notEmpty().withMessage("Description is required"),
+    body("alamat").notEmpty().withMessage("alamat is required"),
     body("pelajaran").notEmpty().withMessage("pelajaran is required"),
   ];
 
@@ -24,9 +24,9 @@ async function createCrud(name, alamat, pelajaran, authId) {
   }
 
   try {
-    const [newCrud] = await connection.query('insert into todos (name, alamat, pelajaran, user_id) values (?,?,?)', [name, alamat, pelajaran, userId]);
+    const [newCrud] = await connection.query('insert into teacher (name, alamat, pelajaran, auth_id) values (?,?,?,?)', [name, alamat, pelajaran, authId]);
     return {
-      status: true, message: 'Todo has been created', data: {
+      status: true, message: 'Crud has been created', data: {
         id: newCrud.insertId,
         name, alamat, pelajaran, authId
       }
@@ -81,4 +81,24 @@ async function updateCrud(crudId, name, alamat, pelajaran, authId) {
     console.log(error);
   }
 }
+async function deleteCrud(crudId, authId) {
+  try {
+    const [deletedCrud] = await connection.query('delete from todos where id =? and user_id =?', [crudId, authId]);
+    return {
+      status: true,
+      message: 'Crud has been deleted',
+      data: deletedCrud
+    }
+  } catch (error) {
+    console.log(error);
+  }
 
+}
+
+module.exports = {
+  listCrud,
+  createCrud,
+  showCrud,
+  updateCrud,
+  deleteCrud
+}

@@ -14,17 +14,16 @@ async function register(req, res) {
   if (!errors.isEmpty()) {
     const errMsg = errors.array().map(error => ({
       [error.path]: error.msg
-    })
-    )
+    }));
     return res.status(422).json({
       status: false,
-      message: 'error validation',
+      message: 'Validation error',
       error: errMsg
     });
   }
   const { name, email, password } = req.body;
   try {
-    const result = await registerUser(name, email, password);
+    const result = await registerAuth(name, email, password);
     if (result.success) {
       res.status(201).json({
         success: result.success,
@@ -34,15 +33,14 @@ async function register(req, res) {
           name: result.data.name,
           email: result.data.email
         }
-      })
+      });
     } else {
-      res.status(500).json({ error: result.message })
+      res.status(500).json({ error: result.message });
     }
-  }
-  catch (error) {
+  } catch (error) {
     console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-
 }
 
 // login
@@ -66,7 +64,7 @@ async function login(req, res) {
 
   const { email, password } = req.body;
   try {
-    const result = await loginUser(email, password);
+    const result = await loginAuth(email, password);
     if (result.success) {
       res.status(200).json({
         success: true,
@@ -84,7 +82,7 @@ async function login(req, res) {
 }
 
 
-// get Me dari authModel
+// get Me 
 async function me(req, res) {
   try {
     const token = req.headers.authorization;

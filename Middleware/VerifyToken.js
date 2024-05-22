@@ -2,13 +2,13 @@ const jwt = require('jsonwebtoken');
 
 async function verifyToken(req, res, next) {
   const token = req.headers.authorization;
-  jwt.verify(token, 'TeacherSecretKey', function (err, decoded) {
+  jwt.verify(token, 'teacherSecretKey', function (err, decoded) {
     if (err) {
       return res.status(401).json({
         message: "Invalid Token, Unauthorized"
       })
     }
-    req.user = decoded;
+    req.auth = decoded;
     return next();
   })
 }
