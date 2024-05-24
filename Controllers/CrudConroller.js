@@ -1,4 +1,4 @@
-const { listCrud, createCrud, showCrud, updateCrud, deleteCrud } = require('../Models/crudSystem');
+const { listCrud, createCrud, showCrud, updateCrud, deleteCrud, searchCrud } = require('../Models/crudSystem');
 
 async function getCrud(req, res) {
   try {
@@ -34,7 +34,7 @@ async function addCrud(req, res) {
 async function crudById(req, res) {
   try {
     const crudId = req.params.id;
-    const authId = req.user.id;
+    const authId = req.auth.id;
     const crud = await showCrud(crudId, authId);
     if (crud.status) {
       res.status(200).json({
@@ -52,7 +52,7 @@ async function updateCrudById(req, res) {
     const crudId = req.params.id;
     const authId = req.auth.id;
     const { name, alamat, pelajaran } = req.body;
-    const crud = await updateCrud(crudId, name, alamat, pelajaran, userId);
+    const crud = await updateCrud(crudId, name, alamat, pelajaran, authId);
     if (crud.status) {
       res.status(200).json({
         status: crud.status,

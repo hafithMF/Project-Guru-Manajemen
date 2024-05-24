@@ -4,7 +4,7 @@ const { getCrud, addCrud, CrudById, updateCrudById, deleteCrudById, crudById } =
 
 const verifyToken = require('../Middleware/VerifyToken');
 
-router.get('', verifyToken, getCrud);
+router.get('/list', verifyToken, getCrud);
 router.post('/create', verifyToken, addCrud);
 router.get('/:id', verifyToken, crudById);
 router.patch('/:id/update', verifyToken, updateCrudById);

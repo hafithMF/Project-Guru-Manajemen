@@ -4,7 +4,7 @@ const runValidation = require('../Config/Validation');
 
 async function listCrud(authId) {
   try {
-    const [crud] = await connection.query('select * from auth where id = ?', [authId]);
+    const [crud] = await connection.query('select * from teacher where auth_id = ?', [authId]);
     return { status: true, message: 'success get crud', data: crud };
   } catch (error) {
     console.log(error);
@@ -38,7 +38,7 @@ async function createCrud(name, alamat, pelajaran, authId) {
 async function showCrud(crudId, authId) {
 
   try {
-    const [crud] = await connection.query('select * from todos where id =? and auth_id =?', [crudId, authId]);
+    const [crud] = await connection.query('select * from teacher where id =? and auth_id =?', [crudId, authId]);
     return {
       status: true,
       message: 'success get crud',
@@ -52,7 +52,7 @@ async function updateCrud(crudId, name, alamat, pelajaran, authId) {
   // mencek validasi
   const validation = [
     body("name").notEmpty().withMessage("Title is required"),
-    body("alamat").notEmpty().withMessage("Description is required"),
+    body("alamat").notEmpty().withMessage("Alamat is required"),
     body("pelajaran").notEmpty().withMessage("Pelajaran is required"),
   ];
 
@@ -61,7 +61,7 @@ async function updateCrud(crudId, name, alamat, pelajaran, authId) {
     return { status: false, message: 'Validation errors', error: validationErrors };
   }
   try {
-    const [updatedCrud] = await connection.query('update crud set name =?, alamat =?, pelajaran =?, where id =? and auth_id =?', [name, alamat, pelajaran, crudId, authId]);
+    const [updatedCrud] = await connection.query('update teacher set name =?, alamat =?, pelajaran =?  where id =? and auth_id =?', [name, alamat, pelajaran, crudId, authId]);
     if (updatedCrud.affectedRows === 0) {
       return {
         status: false,
@@ -83,7 +83,7 @@ async function updateCrud(crudId, name, alamat, pelajaran, authId) {
 }
 async function deleteCrud(crudId, authId) {
   try {
-    const [deletedCrud] = await connection.query('delete from todos where id =? and user_id =?', [crudId, authId]);
+    const [deletedCrud] = await connection.query('delete from teacher where id =? and auth_id =?', [crudId, authId]);
     return {
       status: true,
       message: 'Crud has been deleted',
@@ -95,10 +95,12 @@ async function deleteCrud(crudId, authId) {
 
 }
 
+
 module.exports = {
   listCrud,
   createCrud,
   showCrud,
   updateCrud,
   deleteCrud
+  
 }
