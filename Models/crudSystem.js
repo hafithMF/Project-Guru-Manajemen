@@ -35,19 +35,6 @@ async function createCrud(name, alamat, pelajaran, authId) {
     console.error(error);
   }
 }
-async function showCrud(crudId, authId) {
-
-  try {
-    const [crud] = await connection.query('select * from teacher where id =? and auth_id =?', [crudId, authId]);
-    return {
-      status: true,
-      message: 'success get crud',
-      data: crud
-    }
-  } catch (error) {
-    console.log(error);
-  }
-}
 async function updateCrud(crudId, name, alamat, pelajaran, authId) {
   // mencek validasi
   const validation = [
@@ -94,13 +81,46 @@ async function deleteCrud(crudId, authId) {
   }
 
 }
+async function searchCrud(authId, query) {
+  try {
+    let sql = 'SELECT * FROM teacher WHERE auth_id = ?';
+    let params = [authId]; 
 
+    if (query.id) {
+      sql += ' AND id = ?';
+      params.push(query.id);
+    }
+    if (query.name) {
+      sql += ' AND name LIKE ?';
+      params.push(`%${query.name}%`);
+    }
+    if (query.alamat) {
+      sql += ' AND alamat LIKE ?';
+      params.push(`%${query.alamat}%`);
+    }
+    if (query.pelajaran) {
+      sql += ' AND pelajaran LIKE ?';
+      params.push(`%${query.pelajaran}%`);
+    }
+
+    const [crud] = await connection.query(sql, params);
+
+    if (crud.length === 0) {
+      return { status: false, message: 'Guru tidak ditemukan' };
+    }
+    return { status: true, message: 'Guru ditemukan', data: crud };
+  } catch (error) {
+    console.error('Error SQL:', error);
+    throw error; 
+  }
+}
 
 module.exports = {
   listCrud,
   createCrud,
-  showCrud,
   updateCrud,
-  deleteCrud
+  deleteCrud,
+  searchCrud
+
   
 }

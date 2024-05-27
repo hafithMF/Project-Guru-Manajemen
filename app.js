@@ -10,9 +10,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
 const AuthRoute = require('./Routes/AuthRoutes');
-const TodoRoute = require('./Routes/CrudRoutes');
+const CrudRoute = require('./Routes/CrudRoutes');
 app.use("/api/guru", AuthRoute);
-app.use("/api", TodoRoute);
+app.use("/api", CrudRoute);
 
 // Server
 const PORT = process.env.PORT || 5000;

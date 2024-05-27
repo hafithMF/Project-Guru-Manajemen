@@ -1,4 +1,4 @@
-const { listCrud, createCrud, showCrud, updateCrud, deleteCrud, searchCrud } = require('../Models/crudSystem');
+const { listCrud, createCrud, updateCrud, deleteCrud, searchCrud} = require('../Models/crudSystem');
 
 async function getCrud(req, res) {
   try {
@@ -22,22 +22,6 @@ async function addCrud(req, res) {
     const crud = await createCrud(name, alamat, pelajaran, authId);
     if (crud.status) {
       res.status(201).json({
-        status: crud.status,
-        message: crud.message,
-        data: crud.data
-      });
-    }
-  } catch (error) {
-    console.log(error);
-  }
-}
-async function crudById(req, res) {
-  try {
-    const crudId = req.params.id;
-    const authId = req.auth.id;
-    const crud = await showCrud(crudId, authId);
-    if (crud.status) {
-      res.status(200).json({
         status: crud.status,
         message: crud.message,
         data: crud.data
@@ -79,11 +63,32 @@ async function deleteCrudById(req, res) {
     console.log(error);
   }
 }
+async function searchCrudData(req, res) {
+  try {
+    const authId = req.auth.id;
+    const query = req.query;
+    const crud = await searchCrud(authId, query);
+    if (crud.status) {
+      res.status(200).json({
+        status: crud.status,
+        message: crud.message,
+        data: crud.data
+      });
+    } else {
+      res.status(404).json({
+        status: crud.status,
+        message: crud.message
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 module.exports = {
-    getCrud,
-    addCrud,
-    crudById,
-    updateCrudById,
-    deleteCrudById
+  getCrud,
+  addCrud,
+  updateCrudById,
+  deleteCrudById,
+  searchCrudData
 }
