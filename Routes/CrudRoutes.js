@@ -8,6 +8,6 @@ router.post('/create', verifyToken, addCrud);
 router.patch('/:id/update', verifyToken, updateCrudById);
 router.delete('/:id/delete', verifyToken, deleteCrudById);
 router.get('/search', verifyToken, searchCrudData);
-router.get('/statistics', verifyToken, getGuruStatisticsData); // Tambahkan ini
+router.get('/statistics', verifyToken, getGuruStatisticsData); 
 
 module.exports = router;

@@ -116,5 +116,5 @@ module.exports = {
   updateCrudById,
   deleteCrudById,
   searchCrudData,
-   getGuruStatisticsData
+  getGuruStatisticsData
 }

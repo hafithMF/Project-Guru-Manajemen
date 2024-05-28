@@ -116,11 +116,9 @@ async function searchCrud(authId, query) {
 }
 async function getGuruStatistics(authId) {
   try {
-    // Menghitung jumlah total guru
     const [totalGuruResult] = await connection.query('SELECT COUNT(*) AS totalGuru FROM teacher WHERE auth_id = ?', [authId]);
     const totalGuru = totalGuruResult[0].totalGuru;
 
-    // Menghitung jumlah guru per mata pelajaran
     const [guruPerPelajaranResult] = await connection.query('SELECT pelajaran, COUNT(*) AS jumlahGuru FROM teacher WHERE auth_id = ? GROUP BY pelajaran', [authId]);
 
     return {
