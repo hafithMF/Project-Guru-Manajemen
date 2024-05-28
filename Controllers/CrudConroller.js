@@ -1,4 +1,4 @@
-const { listCrud, createCrud, updateCrud, deleteCrud, searchCrud} = require('../Models/crudSystem');
+const { listCrud, createCrud, updateCrud, deleteCrud, searchCrud, getGuruStatistics} = require('../Models/crudSystem');
 
 async function getCrud(req, res) {
   try {
@@ -84,11 +84,37 @@ async function searchCrudData(req, res) {
     console.log(error);
   }
 }
+async function getGuruStatisticsData(req, res) {
+  try {
+    const authId = req.auth.id;
+    const stats = await getGuruStatistics(authId);
+    if (stats.status) {
+      res.status(200).json({
+        status: stats.status,
+        message: stats.message,
+        data: stats.data
+      });
+    } else {
+      res.status(404).json({
+        status: stats.status,
+        message: stats.message
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: false,
+      message: 'Terjadi kesalahan dalam mengambil statistik guru.'
+    });
+  }
+}
+
 
 module.exports = {
   getCrud,
   addCrud,
   updateCrudById,
   deleteCrudById,
-  searchCrudData
+  searchCrudData,
+   getGuruStatisticsData
 }

@@ -114,13 +114,37 @@ async function searchCrud(authId, query) {
     throw error; 
   }
 }
+async function getGuruStatistics(authId) {
+  try {
+    // Menghitung jumlah total guru
+    const [totalGuruResult] = await connection.query('SELECT COUNT(*) AS totalGuru FROM teacher WHERE auth_id = ?', [authId]);
+    const totalGuru = totalGuruResult[0].totalGuru;
+
+    // Menghitung jumlah guru per mata pelajaran
+    const [guruPerPelajaranResult] = await connection.query('SELECT pelajaran, COUNT(*) AS jumlahGuru FROM teacher WHERE auth_id = ? GROUP BY pelajaran', [authId]);
+
+    return {
+      status: true,
+      message: 'Statistik guru berhasil diambil',
+      data: {
+        totalGuru,
+        guruPerPelajaran: guruPerPelajaranResult
+      }
+    };
+  } catch (error) {
+    console.log(error);
+    return { status: false, message: 'Terjadi kesalahan saat mengambil statistik guru' };
+  }
+}
+
 
 module.exports = {
   listCrud,
   createCrud,
   updateCrud,
   deleteCrud,
-  searchCrud
+  searchCrud,
+  getGuruStatistics
 
   
 }
