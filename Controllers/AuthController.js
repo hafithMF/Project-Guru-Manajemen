@@ -42,7 +42,6 @@ async function register(req, res) {
     res.status(500).json({ error: 'Internal server error' });
   }
 }
-
 // login
 async function login(req, res) {
   const validation = [
@@ -80,7 +79,6 @@ async function login(req, res) {
     res.status(500).json({ success: false, error: 'Internal server error' });
   }
 }
-
 // get Me 
 async function me(req, res) {
   try {
@@ -100,7 +98,6 @@ async function me(req, res) {
     return res.status(500).json({ error: true, message: 'Failed to fetch auth data' });
   }
 }
-
 // logout 
 async function logout(req, res) {
   try {

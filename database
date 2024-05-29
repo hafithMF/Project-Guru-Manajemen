@@ -1,0 +1,19 @@
+Nama database = guru_manajemen
+table = 
+
+CREATE TABLE auth (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    password INT NOT NULL
+);
+
+CREATE TABLE teacher (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    alamat VARCHAR(255) NOT NULL,
+    alamat VARCHAR(255) NOT NULL,
+    auth_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (auth_id) REFERENCES auth(id)
+);
